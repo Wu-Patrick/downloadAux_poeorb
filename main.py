@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 """
 Copyright:    Wu_Zh
-Filename:     a.py
+Filename:     main.py
 Description:
 
 @author:      wuzhipeng
@@ -12,17 +12,21 @@ Description:
 @software:    PyCharm
 """
 
-
-import requests
 import re
 import os
 import getpass
 import datetime
 
+try:
+    import requests
+except:
+    os.system('pip install requests')
+    import requests
+
 print('Please enter the username and password of https://asf.alaska.edu/')
 username = input('username:')
 password = getpass.getpass("password (will not be displayed):")
-dataFolder = input('Data folder (containing *.zip):')
+dataFolder = input('Data folder (containing *.zip or *.SAFE):')
 saveFolder = input('EOF to save:')
 
 auxUrl = 'https://s1qc.asf.alaska.edu/aux_poeorb/'
@@ -32,13 +36,10 @@ if not os.path.exists(saveFolder):
 
 for idx in range(5):
     ret = requests.get(auxUrl,headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1468.0 Safari/537.36'}).text
-    # names = re.findall('S1.*?.EOF', ret)
-    # with open('html.txt','r') as f:
-    #     ret = f.read()
 
     names = []
     for file in os.listdir(dataFolder):
-        if not file.endswith('.zip'):
+        if not (file.endswith('.zip') or file.endswith('.SAFE')):
             continue
         t = file.split('T',1)[0][-8:]
         t = datetime.datetime.strptime(t,'%Y%m%d')
