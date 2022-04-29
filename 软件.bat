@@ -1,0 +1,1 @@
+pyinstaller -F downloadAux_poeorb.py
